@@ -250,4 +250,10 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Extras
+dist/
+build/
+*.spec
+
+
 # End of https://www.gitignore.io/api/linux,python,windows,pycharm

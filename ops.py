@@ -186,7 +186,7 @@ def spectral_norm(w, name, iteration=1):
     return w_norm
 
 def convolution_SN(tensor, output_dim, kernel_size, stride, name):
-    _, h, w, c = [i.value for i in tensor.get_shape()]
+    _, h, w, c = (i.value for i in tensor.get_shape())
 
     w = tf.get_variable(name=name + 'w', shape=[kernel_size, kernel_size, c, output_dim], initializer=layers.xavier_initializer())
     b = tf.get_variable(name=name + 'b', shape=[output_dim], initializer=tf.constant_initializer(0.0))
@@ -196,7 +196,7 @@ def convolution_SN(tensor, output_dim, kernel_size, stride, name):
     return output
 
 def dense_SN(tensor, output_dim, name):
-    _, h, w, c = [i.value for i in tensor.get_shape()]
+    _, h, w, c = (i.value for i in tensor.get_shape())
 
     w = tf.get_variable(name=name + 'w', shape=[h, w, c, output_dim], initializer=layers.xavier_initializer())
     b = tf.get_variable(name=name + 'b', shape=[output_dim], initializer=tf.constant_initializer(0.0))
@@ -208,7 +208,7 @@ def dense_SN(tensor, output_dim, name):
 def dense_RED_SN(tensor, name):
     sn_w = None
 
-    _, h, w, c = [i.value for i in tensor.get_shape()]
+    _, h, w, c = (i.value for i in tensor.get_shape())
     h = int(h)
     w = int(w)
     c = int(c)

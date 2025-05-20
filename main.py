@@ -5,9 +5,16 @@
 # The greater the number of variations, the longer decensoring process will be.
 
 import sys, time
-from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, QGroupBox, QDesktopWidget, QApplication, QAction, qApp, QApplication, QMessageBox, QRadioButton, QPushButton, QTextEdit, QLabel, QSizePolicy,QMainWindow
-from PySide2.QtCore import Qt, QObject
-from PySide2.QtGui import QFont, QTextCursor
+from PySide6.QtWidgets import (
+    QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, QGroupBox,
+    QApplication, QMessageBox, QRadioButton, QPushButton,
+    QTextEdit, QLabel, QSizePolicy, QMainWindow, QProgressBar
+)
+from PySide6.QtGui import QAction, QGuiApplication, QFont, QTextCursor
+
+from PySide6.QtCore import Qt
+
+
 
 from decensor import Decensor
 
@@ -130,7 +137,7 @@ class MainWindow(QWidget):
 	# #centers the main window
 	def center(self):
 		qr = self.frameGeometry()
-		cp = QDesktopWidget().availableGeometry().center()
+		cp = QGuiApplication.primaryScreen().availableGeometry().center()
 		qr.moveCenter(cp)
 		self.move(qr.topLeft())
 
@@ -138,8 +145,8 @@ if __name__ == '__main__':
 	import os
     # you could remove this if statement if there's no error without this
 	if os.name == 'nt':
-		import PySide2
-		pyqt = os.path.dirname(PySide2.__file__)
+		import PySide6
+		pyqt = os.path.dirname(PySide6.__file__)
 		QApplication.addLibraryPath(os.path.join(pyqt, "plugins"))
 	app = QApplication(sys.argv)
 	ex = MainWindow()

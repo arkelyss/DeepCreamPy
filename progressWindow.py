@@ -3,9 +3,15 @@
 # understanding flow of code
 
 import sys
-import PySide2
-from PySide2.QtWidgets import (QApplication, QMainWindow, QDesktopWidget, QPushButton,
-                             QToolTip, QLabel, QProgressBar, QAction, qApp)
+import PySide6
+from PySide6.QtWidgets import (
+    QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, QGroupBox,
+    QApplication, QMessageBox, QRadioButton, QPushButton,
+    QTextEdit, QLabel, QSizePolicy, QMainWindow, QProgressBar
+)
+
+from PySide6.QtGui import QAction, QGuiApplication
+
 # from PyQt5.QtCore import QThread
 from signals import Signals
 import threading
@@ -90,7 +96,7 @@ class ProgressWindow(QMainWindow):
 
     def center(self):
         qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
+        cp = QGuiApplication.primaryScreen().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
@@ -140,8 +146,8 @@ if __name__ == "__main__":
     import os
     # you could remove this if statement if there's no error without this
     if os.name == 'nt':
-        import PySide2
-        pyqt = os.path.dirname(PySide2.__file__)
+        import PySide6
+        pyqt = os.path.dirname(PySide6.__file__)
         QApplication.addLibraryPath(os.path.join(pyqt, "plugins"))
     app = QApplication(sys.argv)
     ex = ProgressWindow(1, 1, debug  = True)

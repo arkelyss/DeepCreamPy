@@ -1,4 +1,3 @@
-from __future__ import division
 from ops import *
 import tensorflow.contrib.layers as layers
 import math
@@ -186,7 +185,7 @@ def discriminator_red(input, reuse, name):
 
 def contextual_block(bg_in, fg_in, mask, k_size, lamda, name, stride=1):
     with tf.variable_scope(name):
-        b, h, w, dims = [i.value for i in bg_in.get_shape()]
+        b, h, w, dims = (i.value for i in bg_in.get_shape())
         temp = tf.image.resize_nearest_neighbor(mask, (h, w))
         temp = tf.expand_dims(temp[:, :, :, 0], 3) # b 128 128 1
         mask_r = tf.tile(temp, [1, 1, 1, dims]) # b 128 128 128
@@ -245,7 +244,7 @@ def contextual_block(bg_in, fg_in, mask, k_size, lamda, name, stride=1):
 
 def contextual_block_cs(bg_in, fg_in, mask, k_size, lamda, name, stride=1):
     with tf.variable_scope(name):
-        b, h, w, dims = [i.value for i in bg_in.get_shape()]
+        b, h, w, dims = (i.value for i in bg_in.get_shape())
         temp = tf.image.resize_nearest_neighbor(mask, (h, w))
         temp = tf.expand_dims(temp[:, :, :, 0], 3) # b 128 128 1
         mask_r = tf.tile(temp, [1, 1, 1, dims]) # b 128 128 128
