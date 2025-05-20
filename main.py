@@ -5,27 +5,19 @@
 # The greater the number of variations, the longer decensoring process will be.
 
 import sys, time
-from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, QGroupBox, QDesktopWidget, QApplication
-from PySide2.QtWidgets import QAction, qApp, QApplication, QMessageBox, QRadioButton, QPushButton, QTextEdit, QLabel
-from PySide2.QtWidgets import QSizePolicy,QMainWindow, QStatusBar, QProgressBar
+from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, QGroupBox, QDesktopWidget, QApplication, QAction, qApp, QApplication, QMessageBox, QRadioButton, QPushButton, QTextEdit, QLabel, QSizePolicy,QMainWindow
 from PySide2.QtCore import Qt, QObject
 from PySide2.QtGui import QFont, QTextCursor
+
 from decensor import Decensor
-from signals import Signals
 
-# from decensor import Decensor
-
-# from progressWindow import ProgressWindow
+from progressWindow import ProgressWindow
 
 class MainWindow(QWidget):
 
 	def __init__(self):
 		super().__init__()
-		self.signals = Signals()
 		self.initUI()
-		self.setSignals()
-		self.decensor = Decensor(self)
-		self.load_model()
 
 	def initUI(self):
 
@@ -83,60 +75,25 @@ class MainWindow(QWidget):
 		self.progressMessage.setReadOnly(True)
 		self.progressCursor.insertText("After you prepared your images, click on the decensor button once to begin decensoring.\nPlease be patient.\nDecensoring will take time.\n")
 
-		# Progress Bar
-		self.statusBar  = QStatusBar(self)
-		self.progressBar = QProgressBar()
-		self.progressBar.setMinimum(0)
-		self.progressBar.setMaximum(100)
-		self.progressBar.setValue(0)
-		self.statusLabel = QLabel("Showing Progress")
-
-		self.statusBar.addWidget(self.statusLabel, 1)
-		self.statusBar.addWidget(self.progressBar, 2)
-
 		#put all groups into grid
-		# addWidget(row, column, rowSpan, columnSpan)
 		grid_layout.addWidget(self.tutorialLabel, 0, 0, 1, 2)
 		grid_layout.addWidget(self.censorTypeGroupBox, 1, 0, 1, 1)
 		grid_layout.addWidget(self.variationsGroupBox, 1, 1, 1, 1)
 		grid_layout.addWidget(self.decensorButton, 2, 0, 1, 2)
-		grid_layout.addWidget(self.progressMessage, 3, 0, 1, 2)
-		grid_layout.addWidget(self.statusBar, 4, 0, 1, 2)
+		grid_layout.addWidget(self.progressMessage, 3, 0, 4, 2)
 
 		#window size settings
-		self.resize(900, 600)
+		self.resize(500, 500)
 		self.center()
 		self.setWindowTitle('DeepCreamPy v2.2.0-beta')
 		self.show()
-
-	def load_model(self):
-		# load model to make able to decensor several times
-		self.decensorButton.setEnabled(False)
-		self.decensorButton.setText("Loading Machine Learning Model (Please Wait...)")
-		self.decensor.start()
-		self.decensor.signals = self.signals
-		self.progressCursor.insertText("Loading Decensor app consumes 6 GB memory at maximum")
-
-	def setSignals(self):
-		self.signals.update_decensorButton_Text.connect(self.decensorButton.setText)
-		self.signals.update_decensorButton_Enabled.connect(self.decensorButton.setEnabled)
-		self.signals.update_statusLabel_Text.connect(self.statusLabel.setText)
-		self.signals.update_ProgressBar_SET_VALUE.connect(self.progressBar.setValue)
-		self.signals.update_ProgressBar_MAX_VALUE.connect(self.progressBar.setMaximum)
-		self.signals.update_ProgressBar_MIN_VALUE.connect(self.progressBar.setMinimum)
-		# self.signals.insertText_progressCursor.connect(self.progressCursor.insertText)
-		self.signals.insertText_progressCursor.connect(self.progressMessage.append)
-		self.signals.clear_progressMessage.connect(self.progressMessage.clear)
-		self.signals.appendText_progressMessage.connect(self.progressMessage.append)
 
 	def decensorClicked(self):
 		self.decensorButton.setEnabled(False)
 		self.progressMessage.clear()
 		self.progressCursor.insertText("Decensoring has begun!\n")
 
-		# for now, decensor is initiated when this app is started
-		# self.decensor = Decensor(text_edit = self.progressMessage, text_cursor = self.progressCursor, ui_mode = True)
-
+		decensor = Decensor(text_edit = self.progressMessage, text_cursor = self.progressCursor, ui_mode = True)
 		#https://stackoverflow.com/questions/42349470/pyqt-find-checked-radiobutton-in-a-group
 		#set decensor to right settings
 		#censor type
@@ -146,9 +103,9 @@ class MainWindow(QWidget):
 			if cb.isChecked():
 				censorType = cb.text()
 		if censorType == 'Bar censor':
-			self.decensor.is_mosaic = False
+			decensor.is_mosaic = False
 		else:
-			self.decensor.is_mosaic = True
+			decensor.is_mosaic = True
 
 		#variations count
 		variationsElements = self.variationsGroupBox.children()
@@ -156,12 +113,19 @@ class MainWindow(QWidget):
 		for vb in variationsButtons:
 			if vb.isChecked():
 				variations = int(vb.text())
-		self.decensor.variations = variations
+		decensor.variations = variations
 
 
-		self.decensorButton.setEnabled(False)
-		self.decensor.start()
+		self.decensorButton.setEnabled(True)
+		self.hide()
+		self.progress = ProgressWindow(self, decensor = decensor)
 		# decensor.decensor_all_images_in_folder()
+
+		# self.progress.hide()
+		# self.show()
+
+	# def showAbout(self):
+	# 	QMessageBox.about(self, 'About', "DeepCreamPy v2.2.0 \n Developed by deeppomf")
 
 	# #centers the main window
 	def center(self):
