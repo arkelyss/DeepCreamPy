@@ -152,4 +152,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     ex = ProgressWindow(1, 1, debug  = True)
     ex.show()
-    sys.exit( app.exec_() )
+    sys.exit( app.exec() )

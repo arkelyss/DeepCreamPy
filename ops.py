@@ -1,5 +1,5 @@
 import tensorflow as tf
-import tensorflow.contrib.layers as layers
+import tensorflow.keras.layers as layers
 import numpy as np
 import random as rr
 import math as mt

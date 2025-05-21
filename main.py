@@ -150,4 +150,4 @@ if __name__ == '__main__':
 		QApplication.addLibraryPath(os.path.join(pyqt, "plugins"))
 	app = QApplication(sys.argv)
 	ex = MainWindow()
-	sys.exit(app.exec_())
+	sys.exit(app.exec())

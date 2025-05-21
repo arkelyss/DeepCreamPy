@@ -1,4 +1,5 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import os
 import numpy as np
 import module as mm
@@ -34,7 +35,10 @@ class InpaintNN():
 
 		input = tf.concat([self.X, self.MASK], 3)
 
-		vec_en = mm.encoder(input, reuse=False, name='G_en')
+		self.encoder = mm.Encoder()
+		vec_en = self.encoder(input)
+
+
 
 		vec_con = mm.contextual_block(vec_en, vec_en, self.MASK, 3, 50.0, 'CB1', stride=1)
 
