@@ -1,3 +1,9 @@
+--extra-index-url https://download.pytorch.org/whl/cu116
+
+numpy<2                 # TensorFlow & xformers need 1.x
+torch==1.13.1+cu116     # GPU build that xformers wants
+xformers==0.0.16
+
 astor
 gast
 google-pasta
@@ -6,15 +12,13 @@ h5py
 Keras-Applications
 Keras-Preprocessing
 Markdown
-numpy
 opencv-python
 Pillow
-protobuf==3.20
 PySide6
 shiboken6
 scipy
 six
-tensorboard
+tensorboard==2.9.1
 tensorflow-estimator
 termcolor
 Werkzeug
@@ -22,3 +26,5 @@ wrapt
 scikit-image
 imageio
 pywavelets
+tensorflow==2.9.0
+protobuf>=3.9.2,<3.20
